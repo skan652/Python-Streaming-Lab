@@ -7,6 +7,7 @@ from the queue and processes them.
 The Consumer runs forever, just like a streaming system.
 """
 
+from collections import defaultdict
 import time
 from queue import Queue
 
@@ -15,6 +16,7 @@ class Consumer:
         self.q = q
         self.consumed_count = 0
         self.running_total = 0
+        self.total_by_type = defaultdict(float)
 
 
     def start(self):
@@ -28,11 +30,14 @@ class Consumer:
     def process(self, event):
         time.sleep(0.5)  # Simulate processing time
         amount = event.get("amount", 0)
+        event_type = event.get("type", "unknown")
         self.running_total += amount
         self.consumed_count += 1
+        self.total_by_type[event_type] += amount
         print(f"Running total: {self.running_total}",
               "amount added:", amount,
-              "consumed count:", {self.consumed_count})
+              "consumed count:", {self.consumed_count},
+              "totals by type:", dict(self.total_by_type))
         
 
 # Debugging test
