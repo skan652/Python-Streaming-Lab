@@ -12,19 +12,19 @@ from producer import CSVProducer
 from consumer import Consumer
 
 def main():
-    """
-    TODO:
-    - Create the shared queue.
-    - Instantiate the producer and consumer.
-    - Create a thread for each.
-    - Start both threads.
-    - Optionally join them so the program runs continuously.
+    q = Queue()
 
-    The students should run:
-        python pipeline.py
-    and observe live streaming behavior.
-    """
+    producer = CSVProducer("transactions.csv", q, delay=1.0)
+    consumer = Consumer(q)
 
+    producer_thread = threading.Thread(target=producer.start)
+    consumer_thread = threading.Thread(target=consumer.start)
+
+    producer_thread.start()
+    consumer_thread.start()
+
+    producer_thread.join()
+    consumer_thread.join()
 
 if __name__ == "__main__":
     print("Starting the Python Streaming Pipeline...")

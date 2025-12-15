@@ -12,46 +12,32 @@ from queue import Queue
 
 class Consumer:
     def __init__(self, q):
-        """
-        PARAMETERS:
-        - q : the shared queue (simulated topic)
+        self.q = q
+        self.consumed_count = 0
+        self.running_total = 0
 
-        TODO:
-        - Store the queue.
-        - Initialize any state variables you may want later,
-          e.g. a running total for stateful computations.
-        """
-        
 
     def start(self):
-        """
-        Main loop of the consumer.
-
-        TODO:
-        - Continuously call q.get() to receive events.
-        - Print the event received.
-        - Pass it to the process() function.
-        """
+        for _event in iter(self.q.get, None):
+            print(f"Consumed event: {_event}")
+            self.process(_event)
+            self.consumed_count += 1
+            print(f"Total events consumed: {self.consumed_count}")
     
 
     def process(self, event):
-        """
-        TODO:
-        - Simulate some processing time using time.sleep().
-        - Transform fields (e.g., convert amount to float).
-        - Implement optional filtering conditions.
-        - Update any state (example: running total).
-        """
-   
+        time.sleep(0.5)  # Simulate processing time
+        amount = event.get("amount", 0)
+        self.running_total += amount
+        self.consumed_count += 1
+        print(f"Running total: {self.running_total}",
+              "amount added:", amount,
+              "consumed count:", {self.consumed_count})
+        
 
 # Debugging test
 
 if __name__ == "__main__":
-    """
-    Run this alone to see consumer behavior.
-
-    Note: It will block waiting for messages since no producer is running.
-    """
     q = Queue()
     consumer = Consumer(q)
     consumer.start()
