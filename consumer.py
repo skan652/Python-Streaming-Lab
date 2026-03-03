@@ -29,7 +29,7 @@ class Consumer:
 
     def process(self, event):
         time.sleep(0.5)  # Simulate processing time
-        amount = event.get("amount", 0)
+        amount = float(event.get("amount", 0))
         event_type = event.get("type", "unknown")
         self.running_total += amount
         self.total_by_type[event_type] += amount

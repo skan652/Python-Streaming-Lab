@@ -23,6 +23,7 @@ class CSVProducer:
                 print(f"Sending row: {row}")
                 self.q.put(row)
                 time.sleep(self.delay + random.uniform(-0.1, 0.1))  # Add jitter
+        self.q.put(None)  # Signal consumer to stop
 
 
 # Debugging test
