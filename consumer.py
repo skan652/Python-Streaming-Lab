@@ -32,7 +32,6 @@ class Consumer:
         amount = event.get("amount", 0)
         event_type = event.get("type", "unknown")
         self.running_total += amount
-        self.consumed_count += 1
         self.total_by_type[event_type] += amount
         print(f"Running total: {self.running_total}",
               "amount added:", amount,
